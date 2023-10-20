@@ -10,7 +10,6 @@ public interface IApplicationEvent
     void InvokeTripleFloat(float value1, float value2, float value3);
     void InvokeBool(bool value);
     void InvokeDoubleBool(bool value1, bool value2);
-    void InvokeTripleBool(bool value1, bool value2);
     void InvokeBoolString(bool value1, string value2);
     void InvokeObject(object value);
     void InvokeGameObject(UnityEngine.GameObject value);

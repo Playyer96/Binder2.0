@@ -18,10 +18,10 @@ public class HealthTrigger : MonoBehaviour
             }
 
             // Trigger the event to update the health bar
-            EventManager<Health>.TriggerEvent(EventKey.UPDATE_HEALTH, new Health(){
-                currenthealth = currentHealth,
-                name = "John"
-            });
+            // EventManager<Health>.TriggerEvent(EventKey.UPDATE_HEALTH, new Health(){
+            //     currenthealth = currentHealth,
+            //     name = "John"
+            // });
         }
     }
 }

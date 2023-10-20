@@ -12,7 +12,7 @@ public class HealthBar : MonoBehaviour
     void Start()
     {
         // Register for health update events
-        EventManager<Health>.RegisterEvent(EventKey.UPDATE_HEALTH, UpdateHealth);
+        // EventManager<Health>.RegisterEvent(EventKey.UPDATE_HEALTH, UpdateHealth);
     }
 
     void UpdateHealth(Health health)
@@ -23,6 +23,6 @@ public class HealthBar : MonoBehaviour
     private void OnDestroy()
     {
         //Unregister from events when the object is destroyed
-        EventManager<Health>.UnregisterEvent(EventKey.UPDATE_HEALTH, UpdateHealth);
+        // EventManager<Health>.UnregisterEvent(EventKey.UPDATE_HEALTH, UpdateHealth);
     }
 }

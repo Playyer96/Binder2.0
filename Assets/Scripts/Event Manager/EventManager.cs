@@ -1,42 +1,85 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
-public static class EventManager<TEventArgs>
+public class EventManager : IEventManager
 {
-    private static Dictionary<string, Action<TEventArgs>> eventDictionary = new Dictionary<string, Action<TEventArgs>>();
+    private static EventManager instance;
 
-    public static void RegisterEvent(string eventType, Action<TEventArgs> eventHandler)
+    public static EventManager Instance
     {
-        if (!eventDictionary.ContainsKey(eventType))
+        get
         {
-            eventDictionary[eventType] = eventHandler;
-        }
-        else
-        {
-            eventDictionary[eventType] += eventHandler;
+            if (instance == null)
+            {
+                instance = new EventManager();
+            }
+
+            return instance;
         }
     }
 
-    public static void UnregisterEvent(string eventType, Action<TEventArgs> eventHandler)
+    private List<IApplicationEvent> _applicationEvents;
+
+    public EventManager()
     {
-        if (eventDictionary.ContainsKey(eventType))
-        {
-            eventDictionary[eventType] -= eventHandler;
-        }
+        _applicationEvents = new List<IApplicationEvent>();
+        Init();
+    }
+    
+    public T GetEvent<T>()
+    {
+        return (T)_applicationEvents.FirstOrDefault(x => x.GetType() == typeof(T));
     }
 
-    public static void TriggerEvent(string eventType, TEventArgs eventArgs)
+    public void Invoke<T>()
     {
-        if (eventDictionary.ContainsKey(eventType))
-        {
-            eventDictionary[eventType]?.Invoke(eventArgs);
-        }
+        ((IApplicationEvent) GetEvent<T>()).Invoke();
     }
-}
 
-public static class EventKey
-{
-    public static string UPDATE_HEALTH = "UpdateHealth";
+    public void InvokeInt<T>(int value)
+    {
+        ((IApplicationEvent) GetEvent<T>()).InvokeInt(value);
+    }
+
+    public void InvokeString<T>(string value)
+    {
+        ((IApplicationEvent) GetEvent<T>()).InvokeString(value);
+    }
+
+    public void InvokeDoubleString<T>(string value1, string value2)
+    {
+        ((IApplicationEvent)GetEvent<T>()).InvokeDoubleString(value1, value2);
+    }
+
+    public void InvokeFloat<T>(float value)
+    {
+        ((IApplicationEvent) GetEvent<T>()).InvokeFloat(value);
+    }
+
+    public void InvokeBool<T>(bool value)
+    {
+        ((IApplicationEvent) GetEvent<T>()).InvokeBool(value);
+    }
+
+    public void InvokeDoubleBool<T>(bool value1, bool value2)
+    {
+        ((IApplicationEvent) GetEvent<T>()).InvokeDoubleBool(value1,value2);
+    }
+
+    public void InvokeObject<T>(object value)
+    {
+        ((IApplicationEvent) GetEvent<T>()).InvokeObject(value);
+    }
+    
+    private void Init()
+    {
+        _applicationEvents.AddRange(new List<IApplicationEvent>
+        {
+            
+        });
+    }
 }

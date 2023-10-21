@@ -9,15 +9,15 @@ public class BaseEvent : IApplicationEvent
     public Action<double> doubleEvent;
     public Action<bool, string> boolStringEvent;
     public Action<float, float> doubleFloatEvent;
-    private Action<int, int> doubleIntEvent;
-    private Action<string, string> doubleStringEvent;
-    private Action<float> floatEvent;
-    private Action<GameObject> gameObjectEvent;
-    private Action<int> intEvent;
-    private Action<object> objectEvent;
-    private Action<string> stringEvent;
-    private Action<float, float, float> tripleFloatEvent;
-    private Action<GameObject, GameObject> twoGameObjectEvent;
+    public Action<int, int> doubleIntEvent;
+    public Action<string, string> doubleStringEvent;
+    public Action<float> floatEvent;
+    public Action<GameObject> gameObjectEvent;
+    public Action<int> intEvent;
+    public Action<object> objectEvent;
+    public Action<string> stringEvent;
+    public Action<float, float, float> tripleFloatEvent;
+    public Action<GameObject, GameObject> twoGameObjectEvent;
 
     public void Invoke()
     {

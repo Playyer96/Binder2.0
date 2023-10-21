@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,10 +13,17 @@ public class HealthBar : MonoBehaviour
     {
         _health = health;
         
-        UpdateUI();
+        EventManager.Instance.GetEvent<OnDamageTaken>().intEvent += UpdateUI;
+        EventManager.Instance.GetEvent<OnHealed>().intEvent += UpdateUI;
     }
 
-    public void UpdateUI()
+    private void OnDestroy()
+    {
+        EventManager.Instance.GetEvent<OnDamageTaken>().intEvent -= UpdateUI;
+        EventManager.Instance.GetEvent<OnHealed>().intEvent -= UpdateUI;
+    }
+
+    public void UpdateUI(int value)
     {
         if (_health != null)
         {

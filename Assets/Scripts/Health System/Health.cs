@@ -22,6 +22,8 @@ public class Health
             CurrentHealth = 0;
             Die();
         }
+        
+        EventManager.Instance.InvokeInt<OnDamageTaken>(damage);
     }
 
     public void Heal(int amount)
@@ -32,10 +34,12 @@ public class Health
         {
             CurrentHealth = MaxHealth;
         }
+        
+        EventManager.Instance.InvokeInt<OnHealed>(amount);
     }
 
     public void Die()
     {
-        Debug.Log($"Player died!!");
+        EventManager.Instance.Invoke<OnDie>();
     }
 }

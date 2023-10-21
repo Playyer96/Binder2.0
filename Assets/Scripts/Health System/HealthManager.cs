@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,6 +15,31 @@ public class HealthManager : MonoBehaviour
         // Create a new Health instance with maximum health value
         _health = new Health(_healthAmount);
         _healthBar.Init(_health);
+
+        EventManager.Instance.GetEvent<OnDamageTaken>().intEvent += TakeDamage;
+        EventManager.Instance.GetEvent<OnHealed>().intEvent += Heal;
+        EventManager.Instance.GetEvent<OnDie>().simpleEvent += Die;
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.Instance.GetEvent<OnDamageTaken>().intEvent -= TakeDamage;
+        EventManager.Instance.GetEvent<OnHealed>().intEvent -= Heal;
+        EventManager.Instance.GetEvent<OnDie>().simpleEvent -= Die;
+    }
+
+    // This Update is only to test 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _health.TakeDamage(5);
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            _health.Heal(6);
+        }
     }
 
     /// <summary>
@@ -22,7 +48,6 @@ public class HealthManager : MonoBehaviour
     /// <param name="damage"></param>
     public void TakeDamage(int damage)
     {
-        _health.TakeDamage(damage);
     }
 
     /// <summary>
@@ -31,11 +56,9 @@ public class HealthManager : MonoBehaviour
     /// <param name="amount"></param>
     public void Heal(int amount)
     {
-        _health.Heal(amount);
     }
 
     public void Die()
     {
-        
     }
 }

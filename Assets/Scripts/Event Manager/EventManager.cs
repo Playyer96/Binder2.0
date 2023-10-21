@@ -75,7 +75,9 @@ public class EventManager : IEventManager
     {
         _applicationEvents.AddRange(new List<IApplicationEvent>
         {
-            
+            new OnDamageTaken(),
+            new OnHealed(),
+            new OnDie(),
         });
     }
 }

@@ -3,85 +3,33 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5.0f;
-    [SerializeField] private float rotationSpeed = 5.0f;
-    [SerializeField] private float avoidanceRadius = 0.2f;
+    [SerializeField] private float _speed = 10;
+    [SerializeField] private float _turnSpeed = 90;
+    [SerializeField] private float _smoothTime = 3f;
 
-    private Rigidbody2D rb;
-    private Vector2 targetPosition;
-    private bool isMoving;
+    [SerializeField] private float _minDistance = 1f;
+
+    float _angle;
+    private Vector2 _mousePosition;
+    private Vector2 _direction;
+    private Vector2 _targetVelocity;
+    private Rigidbody2D _rb;
 
     private void Awake()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Confined;
+        TryGetComponent(out _rb);
     }
 
-    private void Start()
+    void FixedUpdate()
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        _mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _direction = _mousePosition - (Vector2)transform.position;
+        _angle = Vector2.SignedAngle(Vector2.right, _direction);
+        _mousePosition += ((Vector2)transform.position - _mousePosition).normalized * _minDistance;
+        _rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, _angle), _turnSpeed * Time.fixedDeltaTime));
 
-    private void Update()
-    {
-        targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        isMoving = true;
-    }
 
-    private void FixedUpdate()
-    {
-        if (isMoving)
-        {
-            MoveCharacter();
-            RotateCharacter();
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        // Draw the avoidance radius in the scene view.
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, avoidanceRadius);
-    }
-
-    private void MoveCharacter()
-    {
-        Vector2 direction = targetPosition - rb.position;
-
-        // Check for obstacles within the avoidanceRadius using OverlapCircle.
-        Collider2D[] hits = Physics2D.OverlapCircleAll(rb.position, avoidanceRadius);
-
-        bool shouldMove = true;
-
-        foreach (var hit in hits)
-        {
-            if (hit.gameObject != gameObject)
-            {
-                // An obstacle is detected, stop moving.
-                shouldMove = false;
-                break;
-            }
-        }
-
-        if (shouldMove)
-        {
-            Vector2 newPosition = Vector2.MoveTowards(rb.position, targetPosition, moveSpeed * Time.fixedDeltaTime);
-            rb.MovePosition(newPosition);
-        }
-        else
-        {
-            isMoving = false;
-        }
-    }
-
-    private void RotateCharacter()
-    {
-        Vector2 direction = targetPosition - rb.position;
-        if (direction != Vector2.zero)
-        {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.fixedDeltaTime);
-        }
+        _targetVelocity = (_mousePosition - (Vector2)transform.position) / _smoothTime;
+        _rb.velocity = Vector2.ClampMagnitude(_targetVelocity, _speed);
     }
 }

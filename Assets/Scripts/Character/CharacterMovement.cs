@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -20,6 +21,12 @@ public class CharacterMovement : MonoBehaviour
         TryGetComponent(out _rb);
     }
 
+    private void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     void FixedUpdate()
     {
         _mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -29,7 +36,7 @@ public class CharacterMovement : MonoBehaviour
         _rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, _angle), _turnSpeed * Time.fixedDeltaTime));
 
 
-        _targetVelocity = (_mousePosition - (Vector2)transform.position) / _smoothTime;
+        _targetVelocity = (_mousePosition - (Vector2)transform.position) / (_smoothTime * Time.fixedDeltaTime);
         _rb.velocity = Vector2.ClampMagnitude(_targetVelocity, _speed);
     }
 }

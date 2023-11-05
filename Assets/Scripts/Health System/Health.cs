@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Health
 {
@@ -10,25 +11,36 @@ public class Health
     public int CurrentHealth { get; private set; }
     public bool IsDead { get; private set; }
 
+    private float damageEventCooldown = 1.0f;  // Cooldown period for damage event (adjust as needed)
+    private float healEventCooldown = 1.0f;    // Cooldown period for heal event (adjust as needed)
+
+    private float lastDamageEventTime;
+    private float lastHealEventTime;
+
     public Health(int maxHealth)
     {
         MaxHealth = maxHealth;
         CurrentHealth = maxHealth;
         IsDead = false;
+        lastDamageEventTime = Time.time - damageEventCooldown;
+        lastHealEventTime = Time.time - healEventCooldown;
     }
 
     public void TakeDamage(int damage)
     {
-        CurrentHealth -= damage;
-        OnDamageTakenEvent?.Invoke(damage);
+        if (Time.time - lastDamageEventTime >= damageEventCooldown)
+        {
+            CurrentHealth -= damage;
+            OnDamageTakenEvent?.Invoke(damage);
+            lastDamageEventTime = Time.time;
+        }
 
         if (CurrentHealth <= 0)
         {
             CurrentHealth = 0;
-            OnDieEvent?.Invoke();
+            Die();
         }
     }
-
 
     public void Heal(int amount)
     {
@@ -37,8 +49,12 @@ public class Health
             return; // Do not heal if already dead
         }
 
-        CurrentHealth += amount;
-        OnHealedEvent?.Invoke(amount);
+        if (Time.time - lastHealEventTime >= healEventCooldown)
+        {
+            CurrentHealth += amount;
+            OnHealedEvent?.Invoke(amount);
+            lastHealEventTime = Time.time;
+        }
 
         if (CurrentHealth > MaxHealth)
         {

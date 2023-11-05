@@ -10,21 +10,8 @@ public class HealthManager : MonoBehaviour
     {
         health = new Health(maxHealth);
 
-        // Subscribe to the events from the Health instance
-        health.OnDamageTakenEvent += TakeDamage;
-        health.OnHealedEvent += Heal;
-        health.OnDieEvent += Die;
-
         // Now, you can safely update the UI using the Init method
         healthBar.Init(health);
-    }
-
-    private void OnDestroy()
-    {
-        // Unsubscribe from the events when the object is destroyed
-        health.OnDamageTakenEvent -= TakeDamage;
-        health.OnHealedEvent -= Heal;
-        health.OnDieEvent -= Die;
     }
 
     public void TakeDamage(int damage)

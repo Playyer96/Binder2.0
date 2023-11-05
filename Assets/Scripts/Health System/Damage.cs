@@ -10,7 +10,6 @@ public class Damage : MonoBehaviour
         {
             // Invoke the TakeDamage method of the specific HealthManager instance
             _healthManager.TakeDamage(1);
-            Debug.Log($"Auch!");
         }
     }
 }

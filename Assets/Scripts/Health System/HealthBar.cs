@@ -17,7 +17,7 @@ public class HealthBar : MonoBehaviour
         health.OnDamageTakenEvent += UpdateUI;
         health.OnHealedEvent += UpdateUI;
         health.OnDieEvent += HandleDeath;
-        // UpdateUI(health.CurrentHealth);
+        UpdateUI(health.CurrentHealth);
     }
 
     private void OnDestroy()
@@ -30,9 +30,9 @@ public class HealthBar : MonoBehaviour
 
     public void UpdateUI(int value)
     {
-        healthText.text = "Health " + value;
+        healthText.text = "Health " + health.CurrentHealth;
         healthSlider.maxValue = health.MaxHealth;
-        healthSlider.value = value;
+        healthSlider.value = health.CurrentHealth;
     }
 
     public void HandleDeath()

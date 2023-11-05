@@ -4,35 +4,39 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _healthText;
-    [SerializeField] private Slider _healthSlider;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private Slider healthSlider;
 
-    private Health _health;
+    private Health health;
 
     public void Init(Health health)
     {
-        _health = health;
-        
-        EventManager.Instance.GetEvent<OnDamageTaken>().intEvent += UpdateUI;
-        EventManager.Instance.GetEvent<OnHealed>().intEvent += UpdateUI;
+        this.health = health;
+
+        // Subscribe to the events of the Health instance
+        health.OnDamageTakenEvent += UpdateUI;
+        health.OnHealedEvent += UpdateUI;
+        health.OnDieEvent += HandleDeath;
+        // UpdateUI(health.CurrentHealth);
     }
 
     private void OnDestroy()
     {
-        EventManager.Instance.GetEvent<OnDamageTaken>().intEvent -= UpdateUI;
-        EventManager.Instance.GetEvent<OnHealed>().intEvent -= UpdateUI;
+        // Unsubscribe from the events when the object is destroyed
+        health.OnDamageTakenEvent -= UpdateUI;
+        health.OnHealedEvent -= UpdateUI;
+        health.OnDieEvent -= HandleDeath;
     }
 
     public void UpdateUI(int value)
     {
-        if (_health != null)
-        {
-            // Update text displaying the current health of the player
-            _healthText.text = "Health " + _health.CurrentHealth.ToString();
+        healthText.text = "Health " + value;
+        healthSlider.maxValue = health.MaxHealth;
+        healthSlider.value = value;
+    }
 
-            // Update the max and current value of the Health for the slider
-            _healthSlider.maxValue = _health.MaxHealth;
-            _healthSlider.value = _health.CurrentHealth;
-        }
+    public void HandleDeath()
+    {
+        // Handle death-related UI changes here if needed
     }
 }

@@ -1,3 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+    <ui:VisualElement style="width: 759px; height: 256px; flex-direction: row;">
+        <ui:VisualElement name="PlayerHUD" style="width: 256px; height: 256px; background-image: url(&apos;project://database/Assets/Art/UI/grey_panel.png?fileID=2800000&amp;guid=3098c63f48f41430888673e195b3e751&amp;type=3#grey_panel&apos;); -unity-background-scale-mode: scale-to-fit;">
+            <ui:VisualElement name="PlayerImage" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Art/Ships/ship_sidesA.png?fileID=2800000&amp;guid=0f312f7fa617c4752ac2c988d7dd34f7&amp;type=3#ship_sidesA&apos;); -unity-background-image-tint-color: rgb(198, 136, 255); -unity-background-scale-mode: scale-to-fit;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: 942px; height: 62px; -unity-background-scale-mode: stretch-to-fill; justify-content: space-around;">
+            <ui:Slider picking-mode="Ignore" value="50" high-value="100" style="background-image: url(&apos;project://database/Assets/Art/UI/grey_panel.png?fileID=2800000&amp;guid=3098c63f48f41430888673e195b3e751&amp;type=3#grey_panel&apos;); -unity-slice-left: 77; -unity-slice-top: 77; -unity-slice-right: 77; -unity-slice-bottom: 77; -unity-slice-scale: 0.2px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

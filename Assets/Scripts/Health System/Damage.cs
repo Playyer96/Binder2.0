@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
-    private HealthManager _healthManager;
+    [SerializeField] private int damageAmount = 1;
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.TryGetComponent(out _healthManager))
+        if (other.gameObject.TryGetComponent(out CharacterHealthController playerHealthController))
         {
-            // Invoke the TakeDamage method of the specific HealthManager instance
-            _healthManager.TakeDamage(1);
+            playerHealthController.TakeDamage(damageAmount);
         }
     }
 }

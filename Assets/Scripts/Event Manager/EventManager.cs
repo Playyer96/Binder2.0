@@ -1,84 +1,54 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public class EventManager : IEventManager
 {
     private static EventManager instance;
+    public static EventManager Instance => instance ??= new EventManager();
 
-    public static EventManager Instance
+    private readonly Dictionary<Type, object> eventHandlers = new();
+
+    // Register an observer for a specific event type
+    public void Register<T>(Action<T> observer) where T : class
     {
-        get
+        if (!eventHandlers.TryGetValue(typeof(T), out var handlers))
         {
-            if (instance == null)
-            {
-                instance = new EventManager();
-            }
+            handlers = new List<Action<T>>();
+            eventHandlers[typeof(T)] = handlers;
+        }
 
-            return instance;
+        var typedHandlers = (List<Action<T>>)handlers;
+        if (!typedHandlers.Contains(observer))
+        {
+            typedHandlers.Add(observer);
         }
     }
 
-    private List<IApplicationEvent> _applicationEvents;
-
-    public EventManager()
+    // Unregister an observer for a specific event type
+    public void Unregister<T>(Action<T> observer) where T : class
     {
-        _applicationEvents = new List<IApplicationEvent>();
-        Init();
-    }
-    
-    public T GetEvent<T>()
-    {
-        return (T)_applicationEvents.FirstOrDefault(x => x.GetType() == typeof(T));
-    }
-
-    public void Invoke<T>()
-    {
-        ((IApplicationEvent) GetEvent<T>()).Invoke();
-    }
-
-    public void InvokeInt<T>(int value)
-    {
-        ((IApplicationEvent) GetEvent<T>()).InvokeInt(value);
-    }
-
-    public void InvokeString<T>(string value)
-    {
-        ((IApplicationEvent) GetEvent<T>()).InvokeString(value);
-    }
-
-    public void InvokeDoubleString<T>(string value1, string value2)
-    {
-        ((IApplicationEvent)GetEvent<T>()).InvokeDoubleString(value1, value2);
-    }
-
-    public void InvokeFloat<T>(float value)
-    {
-        ((IApplicationEvent) GetEvent<T>()).InvokeFloat(value);
-    }
-
-    public void InvokeBool<T>(bool value)
-    {
-        ((IApplicationEvent) GetEvent<T>()).InvokeBool(value);
-    }
-
-    public void InvokeDoubleBool<T>(bool value1, bool value2)
-    {
-        ((IApplicationEvent) GetEvent<T>()).InvokeDoubleBool(value1,value2);
-    }
-
-    public void InvokeObject<T>(object value)
-    {
-        ((IApplicationEvent) GetEvent<T>()).InvokeObject(value);
-    }
-    
-    private void Init()
-    {
-        _applicationEvents.AddRange(new List<IApplicationEvent>
+        if (eventHandlers.TryGetValue(typeof(T), out var handlers))
         {
-            new OnDamageTaken(),
-            new OnHealed(),
-            new OnDie(),
-        });
+            var typedHandlers = (List<Action<T>>)handlers;
+            typedHandlers.Remove(observer);
+
+            if (typedHandlers.Count == 0)
+            {
+                eventHandlers.Remove(typeof(T));
+            }
+        }
+    }
+
+    // Invoke all observers for a specific event type
+    public void Invoke<T>(T eventArgs) where T : class
+    {
+        if (eventHandlers.TryGetValue(typeof(T), out var handlers))
+        {
+            var typedHandlers = (List<Action<T>>)handlers;
+            foreach (var handler in typedHandlers)
+            {
+                handler.Invoke(eventArgs);
+            }
+        }
     }
 }

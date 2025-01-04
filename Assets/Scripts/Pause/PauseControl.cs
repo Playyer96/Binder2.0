@@ -1,15 +1,16 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PauseControl : MonoBehaviour
 {
     private float _previousTimeScale = 1;
-    [SerializeField] private GameObject _pauseLabel;
+    [SerializeField] private GameObject pauseLabel;
 
-    public static bool IsPaused;
+    public static bool isPaused;
 
     private void Start()
     {
-        _pauseLabel.SetActive(false);
+        pauseLabel.SetActive(false);
     }
 
     private void Update()
@@ -27,17 +28,17 @@ public class PauseControl : MonoBehaviour
             _previousTimeScale = Time.timeScale;
             Time.timeScale = 0;
             AudioListener.pause = true;
-            _pauseLabel.SetActive(true);
+            pauseLabel.SetActive(true);
 
-            IsPaused = true;
+            isPaused = true;
         }
         else if (Time.timeScale == 0)
         {
             Time.timeScale = _previousTimeScale;
             AudioListener.pause = false;
-            _pauseLabel.SetActive(false);
+            pauseLabel.SetActive(false);
 
-            IsPaused = false;
+            isPaused = false;
         }
     }
 }

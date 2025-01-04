@@ -36,6 +36,6 @@ public class CharacterMovement : MonoBehaviour
 
 
         _targetVelocity = (_mousePosition - (Vector2)transform.position) / (_smoothTime * Time.fixedDeltaTime);
-        _rb.velocity = Vector2.ClampMagnitude(_targetVelocity, _speed);
+        _rb.linearVelocity = Vector2.ClampMagnitude(_targetVelocity, _speed);
     }
 }

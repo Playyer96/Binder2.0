@@ -9,10 +9,10 @@ public class Health
 
     public int MaxHealth { get; private set; }
     public int CurrentHealth { get; private set; }
-    public bool IsDead { get; private set; }
+    private bool IsDead { get; set; }
 
-    private float damageEventCooldown = 1.0f;  // Cooldown period for damage event (adjust as needed)
-    private float healEventCooldown = 1.0f;    // Cooldown period for heal event (adjust as needed)
+    private readonly float damageEventCooldown = 1.0f;  // Cooldown period for damage event (adjust as needed)
+    private readonly float healEventCooldown = 1.0f;    // Cooldown period for heal event (adjust as needed)
 
     private float lastDamageEventTime;
     private float lastHealEventTime;

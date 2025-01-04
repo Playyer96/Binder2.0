@@ -75,10 +75,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f864f17b0930440882ff8e4047f2060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
-  _turnSpeed: 360
-  _smoothTime: 5
-  _minDistance: 1
+  speed: 5
+  turnSpeed: 360
+  smoothTime: 15
+  minDistance: 1
+  bounceAmplitude: 0.1
+  bounceFrequency: 1
+  wobbleAngle: 15
+  wobbleSpeed: 5
 --- !u!114 &2341130897212010970
 MonoBehaviour:
   m_ObjectHideFlags: 0
